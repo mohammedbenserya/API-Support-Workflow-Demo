@@ -1,0 +1,17 @@
+name: Label Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label Issue as 'bug' if it contains '[BUG]'
+        if: contains(github.event.issue.title, '[BUG]')
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{"labels":["bug"]}' \
+            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels
